@@ -1,0 +1,48 @@
+{
+  "name": "job-hunter-automation",
+  "version": "1.0.0",
+  "description": "Smart Job Hunter - Automation Service (Login, Scraping, Apply)",
+  "main": "dist/index.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/index.js",
+    "dev": "ts-node src/index.ts",
+    "serve": "ts-node src/index.ts serve",
+    "serve:dev": "ts-node src/index.ts serve --port 8080",
+    "migrate": "ts-node src/index.ts migrate",
+    "login": "ts-node src/index.ts --action login",
+    "fetch-jobs": "ts-node src/index.ts fetch-jobs",
+    "li-login": "ts-node src/linkedin-manual-login.ts",
+    "li-jobs": "tsx src/linkedin-job-discovery.ts",
+    "find-candidates": "ts-node src/linkedin-candidate-discovery.ts",
+    "himalayas-login": "tsx src/himalayas-manual-login.ts",
+    "himalayas-jobs": "tsx src/himalayas-job-discovery.ts",
+    "himalayas-new": "tsx src/new-himalayas-jobs.ts",
+    "indeed-login": "tsx src/indeed-manual-login.ts",
+    "indeed-jobs": "tsx src/indeed-job-discovery.ts",
+    "indeed-new": "tsx src/new-indeed-jobs.ts"
+  },
+  "dependencies": {
+    "commander": "^12.1.0",
+    "cors": "^2.8.6",
+    "crypto": "^1.0.1",
+    "crypto-js": "^4.2.0",
+    "dotenv": "^16.4.5",
+    "express": "^5.2.1",
+    "pg": "^8.20.0",
+    "playwright": "^1.44.0",
+    "playwright-extra": "^4.3.6",
+    "puppeteer-extra-plugin-stealth": "^2.11.2",
+    "winston": "^3.13.0"
+  },
+  "devDependencies": {
+    "@types/cors": "^2.8.19",
+    "@types/crypto-js": "^4.2.2",
+    "@types/express": "^5.0.6",
+    "@types/node": "^20.14.0",
+    "@types/pg": "^8.20.0",
+    "ts-node": "^10.9.2",
+    "tsx": "^4.22.4",
+    "typescript": "^5.4.5"
+  }
+}

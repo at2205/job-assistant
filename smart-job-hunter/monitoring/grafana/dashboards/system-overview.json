@@ -1,0 +1,45 @@
+{
+  "dashboard": {
+    "title": "JobFlow AI - System Overview",
+    "uid": "jobflow-overview",
+    "panels": [
+      {
+        "title": "Service Uptime",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 0, "y": 0 },
+        "targets": [{ "expr": "up", "legendFormat": "{{job}}" }]
+      },
+      {
+        "title": "Memory Usage (MB)",
+        "type": "timeseries",
+        "gridPos": { "h": 8, "w": 12, "x": 0, "y": 4 },
+        "targets": [{ "expr": "jobflow_memory_rss_bytes / 1024 / 1024", "legendFormat": "RSS" }]
+      },
+      {
+        "title": "Queue Backlog",
+        "type": "bargauge",
+        "gridPos": { "h": 8, "w": 12, "x": 12, "y": 4 },
+        "targets": [{ "expr": "bullmq_waiting_count", "legendFormat": "{{queue}}" }]
+      },
+      {
+        "title": "Total Requests",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 6, "y": 0 },
+        "targets": [{ "expr": "jobflow_requests_total" }]
+      },
+      {
+        "title": "Error Rate",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 12, "y": 0 },
+        "targets": [{ "expr": "rate(jobflow_errors_total[5m])" }],
+        "fieldConfig": { "defaults": { "thresholds": { "steps": [{"color": "green", "value": 0}, {"color": "red", "value": 0.1}] } } }
+      },
+      {
+        "title": "Uptime (hours)",
+        "type": "stat",
+        "gridPos": { "h": 4, "w": 6, "x": 18, "y": 0 },
+        "targets": [{ "expr": "jobflow_uptime_seconds / 3600" }]
+      }
+    ]
+  }
+}

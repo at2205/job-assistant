@@ -1,0 +1,46 @@
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+
+# Build
+dist/
+.next/
+out/
+target/
+*.jar
+*.class
+
+# Environment & Secrets
+.env
+.env.local
+.env.production
+*.pem
+*.key
+
+# Sessions & Browser Data
+sessions/
+*.session.json
+
+# Logs
+logs/
+*.log
+
+# Screenshots (from dry runs)
+sessions/screenshots/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Docker
+docker-compose.override.yml
+
+# Ollama models (large)
+ollama_models/

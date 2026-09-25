@@ -1,0 +1,29 @@
+# =============================================
+# Render Blueprint — Backend + DB
+# Deploy: render.com → New → Blueprint → Connect this repo
+# =============================================
+
+services:
+  # Spring Boot API
+  - type: web
+    name: jobhunter-api
+    runtime: docker
+    dockerfilePath: ./backend/Dockerfile
+    region: singapore  # closest to India
+    plan: free  # upgrade to starter ($7/mo) for always-on
+    envVars:
+      - key: SPRING_DATASOURCE_URL
+        fromDatabase:
+          name: jobhunter-db
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: CORS_ORIGINS
+        value: https://your-app.vercel.app
+    healthCheckPath: /actuator/health
+
+databases:
+  - name: jobhunter-db
+    plan: free  # 256MB, enough for MVP
+    region: singapore
+    postgresMajorVersion: "16"

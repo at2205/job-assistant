@@ -1,0 +1,65 @@
+# ===== Dependencies =====
+node_modules/
+**/node_modules/
+.pnp
+.pnp.js
+
+# ===== Build output =====
+dist/
+**/dist/
+.next/
+out/
+build/
+target/
+*.jar
+*.class
+
+# ===== Environment & Secrets =====
+.env
+.env.*
+!.env.example
+**/.env
+**/.env.*
+*.pem
+*.key
+*.enc
+**/*.session.enc
+
+# ===== Browser sessions / login state =====
+sessions/
+**/sessions/
+browser-data/
+*.session.json
+
+# ===== Scraped data / results / personal info =====
+results/
+**/results/
+screenshots/
+**/screenshots/
+*.log
+**/logs/
+
+# ===== Personal documents =====
+*.doc
+*.docx
+~$*
+Aryan_Tomar_Resume*
+resume/
+
+# ===== Scratch / scratch text dumps (scrape logs, may hold personal data) =====
+st.txt
+smart-job-hunter/automation-service/*.txt
+
+# ===== IDE / OS =====
+.vscode/
+.idea/
+*.swp
+*.swo
+.DS_Store
+Thumbs.db
+
+# ===== Docker =====
+docker-compose.override.yml
+
+# ===== Local models =====
+ollama_models/

@@ -1,0 +1,66 @@
+# =============================================
+# Prometheus Alert Rules
+# =============================================
+groups:
+  - name: jobflow_alerts
+    rules:
+      # ---- Service Down ----
+      - alert: BackendDown
+        expr: up{job="backend"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Backend API is down"
+
+      - alert: AutomationDown
+        expr: up{job="automation"} == 0
+        for: 2m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Automation service is down"
+
+      # ---- High Error Rate ----
+      - alert: HighErrorRate
+        expr: rate(http_server_requests_seconds_count{status=~"5.."}[5m]) > 0.1
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "High 5xx error rate on {{ $labels.job }}"
+
+      # ---- Database ----
+      - alert: DatabaseConnectionPoolExhausted
+        expr: hikaricp_connections_active / hikaricp_connections_max > 0.9
+        for: 5m
+        labels:
+          severity: critical
+        annotations:
+          summary: "DB connection pool >90% utilized"
+
+      # ---- Queue ----
+      - alert: QueueBacklog
+        expr: bullmq_waiting_count > 100
+        for: 10m
+        labels:
+          severity: warning
+        annotations:
+          summary: "Job queue backlog exceeds 100"
+
+      - alert: DeadLetterQueueGrowing
+        expr: bullmq_failed_count > 20
+        for: 15m
+        labels:
+          severity: critical
+        annotations:
+          summary: "Dead letter queue has >20 failed jobs"
+
+      # ---- Memory ----
+      - alert: HighMemoryUsage
+        expr: process_resident_memory_bytes / 1024 / 1024 > 1500
+        for: 5m
+        labels:
+          severity: warning
+        annotations:
+          summary: "{{ $labels.job }} memory usage >1.5GB"

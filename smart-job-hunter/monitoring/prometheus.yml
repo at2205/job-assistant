@@ -1,0 +1,54 @@
+# =============================================
+# Prometheus Configuration
+# =============================================
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files:
+  - "alerts.yml"
+
+scrape_configs:
+  # ---- Backend (Spring Boot Actuator) ----
+  - job_name: "backend"
+    metrics_path: /actuator/prometheus
+    static_configs:
+      - targets: ["backend:8080"]
+        labels:
+          service: "backend"
+          environment: "production"
+
+  # ---- Automation Service ----
+  - job_name: "automation"
+    metrics_path: /metrics
+    static_configs:
+      - targets: ["automation:9090"]
+        labels:
+          service: "automation"
+          environment: "production"
+
+  # ---- PostgreSQL (via pg_exporter if added) ----
+  - job_name: "postgres"
+    static_configs:
+      - targets: ["db:9187"]
+        labels:
+          service: "postgres"
+
+  # ---- Redis ----
+  - job_name: "redis"
+    static_configs:
+      - targets: ["redis:9121"]
+        labels:
+          service: "redis"
+
+  # ---- Nginx ----
+  - job_name: "nginx"
+    static_configs:
+      - targets: ["nginx:9113"]
+        labels:
+          service: "nginx"
+
+  # ---- Prometheus self ----
+  - job_name: "prometheus"
+    static_configs:
+      - targets: ["localhost:9090"]
