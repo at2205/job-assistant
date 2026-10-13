@@ -218,6 +218,50 @@ function mapIndeed(file: string): JobRecord[] {
     });
 }
 
+function huntingcubeExternalId(url: string): string {
+  const m = url.match(/[?&]jobId=(\d+)/i);
+  return m ? m[1] : url.split('?')[0];
+}
+
+function mapHuntingCube(file: string): JobRecord[] {
+  const data = JSON.parse(fs.readFileSync(file, 'utf-8'));
+  const jobs: any[] = data.jobs || [];
+  return jobs
+    .filter(j => j.url && j.title)
+    .map((j): JobRecord => {
+      const exp = parseExperience(j.experience);
+      const remote = /remote/i.test(j.workMode || '') || /remote/i.test(j.location || '');
+      // salary text like "₹4L - ₹10L pa" -> lakhs (already annual LPA).
+      const sm = String(j.salary || '').match(/₹?(\d+(?:\.\d+)?)\s*L?\s*-\s*₹?(\d+(?:\.\d+)?)\s*L/i);
+      const salMin = sm ? Math.round(parseFloat(sm[1])) : null;
+      const salMax = sm ? Math.round(parseFloat(sm[2])) : null;
+      return {
+        external_job_id: huntingcubeExternalId(j.url),
+        source_platform: 'huntingcube',
+        title: String(j.title).slice(0, 500),
+        company_name: j.company ? String(j.company).slice(0, 500) : null,
+        location: j.location ? String(j.location).slice(0, 500) : null,
+        experience_min: exp.min,
+        experience_max: exp.max,
+        salary_min: salMin,
+        salary_max: salMax,
+        salary_currency: 'INR',
+        job_description: j.description ? String(j.description) : null,
+        job_url: String(j.url).slice(0, 2000),
+        skills: Array.isArray(j.skills) ? j.skills : [],
+        company_rating: null,
+        job_type: remote ? 'remote' : null,
+        posted_date: null,
+        raw_data: {
+          posted: j.posted ?? null,
+          salaryText: j.salary ?? null,
+          workMode: j.workMode ?? null,
+          experience: j.experience ?? null,
+        },
+      };
+    });
+}
+
 async function main() {
   console.log('='.repeat(60));
   console.log('  INGEST SCRAPED JOBS -> PostgreSQL');
@@ -233,6 +277,7 @@ async function main() {
       if (base.startsWith('linkedin')) records.push(...mapLinkedIn(abs));
       else if (base.startsWith('himalayas')) records.push(...mapHimalayas(abs));
       else if (base.startsWith('indeed')) records.push(...mapIndeed(abs));
+      else if (base.startsWith('huntingcube')) records.push(...mapHuntingCube(abs));
       else records.push(...mapNaukri(abs));
       console.log(`  Loaded ${base}`);
     }
@@ -260,6 +305,12 @@ async function main() {
       const r = mapIndeed(indeed);
       records.push(...r);
       console.log(`  Indeed:   ${path.basename(indeed)} -> ${r.length} jobs`);
+    }
+    const huntingcube = latestFile('huntingcube-jobs-');
+    if (huntingcube) {
+      const r = mapHuntingCube(huntingcube);
+      records.push(...r);
+      console.log(`  HuntingCube: ${path.basename(huntingcube)} -> ${r.length} jobs`);
     }
   }
 

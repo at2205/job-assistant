@@ -20,7 +20,10 @@
     "himalayas-new": "tsx src/new-himalayas-jobs.ts",
     "indeed-login": "tsx src/indeed-manual-login.ts",
     "indeed-jobs": "tsx src/indeed-job-discovery.ts",
-    "indeed-new": "tsx src/new-indeed-jobs.ts"
+    "indeed-new": "tsx src/new-indeed-jobs.ts",
+    "tailor-resume": "tsx src/resume/tailor-resume.ts",
+    "premium-jobs": "tsx src/filter-premium-jobs.ts",
+    "huntingcube-jobs": "tsx src/huntingcube-job-discovery.ts"
   },
   "dependencies": {
     "commander": "^12.1.0",
